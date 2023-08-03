@@ -5,7 +5,7 @@ Code for the simulations in the paper "The Projected Covariance Measure for assu
 The package contains the following files:
 
 #### `test_functions.R`
-
+This file contains all the functions used to compute the PCM test and the tests that we compare to.
 
 #### `sim_gam_binary_comparison.R`
 
