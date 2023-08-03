@@ -1,5 +1,5 @@
 # pcm_code
-Code for the simulations in the paper "The Projected Covariance Measure for assumption-lean variable significance testing" [link](https://arxiv.org/abs/2211.02039).
+Code for the simulations in the paper "The Projected Covariance Measure for assumption-lean variable significance testing". The paper can be found on the [arXiv](https://arxiv.org/abs/2211.02039).
 
 ## Overview
 The package contains the following files:
