@@ -41,11 +41,7 @@ sim_ranger_comparison <- function(n, setting) {
   p_pcm_avg <- 1 - pnorm(mean(pcms))
 
 
-  eps <- X - ranger_reg_method(Z, X)(Z)
-  xi <- Y - ranger_reg_method(Z, Y)(Z)
-  R <- eps * xi
-
-  p_gcm <- 2 * pnorm(-abs(mean(R) / sd(R) * sqrt(n)))
+  p_gcm <- gcm_test(Y, X, Z, ranger_reg_method)
 
 
   p_wgsc_sep <- wgsc(Y, X, Z, ranger_reg_method)

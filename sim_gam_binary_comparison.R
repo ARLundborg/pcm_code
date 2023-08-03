@@ -51,11 +51,7 @@ sim_gam_binary_comparison <- function(n, setting) {
   p_pcm_avg <- 1 - pnorm(mean(pcms))
 
 
-  eps <- X - gam_reg_method(Z, X)(Z)
-  xi <- Y - gam_reg_method_binary(Z, Y)(Z)
-  R <- eps * xi
-
-  p_gcm <- 2 * pnorm(-abs(mean(R) / sd(R) * sqrt(n)))
+  p_gcm <- gcm_test_binary(Y, X, Z, gam_reg_method, gam_reg_method_binary)
 
 
   p_wgsc_sep <- wgsc_binary(Y, X, Z, gam_reg_method, gam_reg_method_binary)

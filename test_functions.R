@@ -1,3 +1,8 @@
+suppressPackageStartupMessages({
+  library(vimp)
+  library(CondIndTests)
+})
+
 pcm_test <- function(Y, X, Z, reg_method, ghat_method = NULL,
                      vhat_reg_method = NULL) {
   Y <- as.numeric(Y)
@@ -236,6 +241,30 @@ wGCM_fix <- function(eps, xi, Z, weight.num) {
   p.value <- (sum(T.stat.sim >= T.stat) + 1) / (nsim +
     1)
   return(p.value)
+}
+
+kci_test <- function(Y, X, Z, GP = TRUE) {
+  return(CondIndTests::KCI(Y, X, Z, GP = GP)$pvalue)
+}
+
+gcm_test <- function(Y, X, Z, reg_method) {
+    n <- length(Y)
+    eps <- X - reg_method(Z, X)(Z)
+    xi <- Y - reg_method(Z, Y)(Z)
+    R <- eps * xi
+
+    p_gcm <- 2 * pnorm(-abs(mean(R) / sd(R) * sqrt(n)))
+    return(p_gcm)
+}
+
+gcm_test_binary <- function(Y, X, Z, reg_method, binary_reg_method) {
+  n <- length(Y)
+  eps <- X - reg_method(Z, X)(Z)
+  xi <- Y - binary_reg_method(Z, Y)(Z)
+  R <- eps * xi
+
+  p_gcm <- 2 * pnorm(-abs(mean(R) / sd(R) * sqrt(n)))
+  return(p_gcm)
 }
 
 gam_g_hat <- function(Z, X, Y) {

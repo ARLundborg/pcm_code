@@ -45,17 +45,13 @@ sim_gam_comparison <- function(n, setting) {
     p_pcm_avg <- 1 - pnorm(mean(pcms))
 
 
-    eps <- X - gam_reg_method(Z, X)(Z)
-    xi <- Y - gam_reg_method(Z, Y)(Z)
-    R <- eps * xi
-
-    p_gcm <- 2 * pnorm(-abs(mean(R) / sd(R) * sqrt(n)))
+    p_gcm <- gcm_test(Y, X, Z, gam_reg_method)
 
     suppressWarnings(
         if (n > 250) {
-            p_kci <- CondIndTests::KCI(Y, X, Z, GP = FALSE)$pvalue
+            p_kci <- kci_test(Y, X, Z, GP = FALSE)
         } else {
-            p_kci <- CondIndTests::KCI(Y, X, Z, GP = TRUE)$pvalue
+            p_kci <- kci_test(Y, X, Z, GP = TRUE)
         }
     )
 
