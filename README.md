@@ -10,7 +10,7 @@ This file contains all the functions used to compute the PCM test and the tests 
 The `pcm_test` and `pcm_test_binary` functions are special in the sense that they also take optional `ghat_method` and `vhat_method` arguments that, if given, replace the `reg_method` when fitting g and v (as defined in Algorithm 1 of the paper).
 
 #### `sim_gam_binary_comparison.R`
-This file contains the simulation function used for the experiments in Section S5.2 of the supplement (Appendix E.2 in the arXiv version) which produces Figure S2 (or Figure 5 in the arXiv version).
+This file contains the simulation function used for the experiments in Section S6.2 of the supplement which produces Figure S2.
 
 To run a single repetition of the experiment, the following command can be used
 ```
@@ -28,7 +28,7 @@ Rscript --vanilla sim_gam_comparison.R 250 0
 which sets the sample size to be 250 and simulates setting 0, printing the resulting p-values.
 
 #### `sim_linear_rates.R`
-This file contains the simulation function used for the experiments in Section S5.1 of the supplement (Appendix E.1 in the arXiv version) which produces Figure S1 (or Figure 4 in the arXiv version).
+This file contains the simulation function used for the experiments in Section S6.1 of the supplement which produces Figure S1.
 
 To run a single repetition of the experiment, the following command can be used
 ```
