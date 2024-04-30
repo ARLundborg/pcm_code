@@ -7,7 +7,7 @@ The package contains the following files:
 #### `test_functions.R`
 This file contains all the functions used to compute the PCM test and the tests that we compare to. Most of the tests require a `reg_method` argument (or possibly two arguments when there is also a binary regression). A `reg_method` in this script is a function that takes in a matrix of predictors and a response and returns a prediction function that predicts on new data. Several examples of `reg_method`s are provided using both linear models (`lm`), generalized additive models (`mgcv::gam`) and random forests (`ranger::ranger`). 
 
-The `pcm_test` and `pcm_test_binary` functions are special in the sense that they also take optional `ghat_method` and `vhat_method` arguments that, if given, replace the `reg_method` when fitting g and v (as defined in Algorithm 1 of the paper).
+The `pcm_test` function is special in the sense that it also takes optional `gtilde_method` and `vhat_reg_method` arguments that, if given, replace the `reg_method` when fitting g and v (as defined in Algorithm 1 of the paper).
 
 #### `sim_gam_binary_comparison.R`
 This file contains the simulation function used for the experiments in Section S6.2 of the supplement which produces Figure S2.

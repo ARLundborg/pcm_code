@@ -15,21 +15,25 @@ sim_regression_errors <- function(n, method) {
 
   if (method == "gam") {
     k <- floor((n - 1) / d)
-    m_formula <- paste0("Y ~ 1 +", paste0(sapply(1:d,
-      function(x) paste0("s(Z[,", x, "], k=k)")), collapse = "+"))
+    m_formula <- paste0("Y ~ 1 +", paste0(sapply(
+      1:d,
+      function(x) paste0("s(Z[,", x, "], k=k)")
+    ), collapse = "+"))
     m <- gam(as.formula(m_formula))
     in_mse <- mean((f(Z[, 1]) - fitted(m))^2)
     out_mse <- mean((f(Z_[, 1]) - predict(m, list(Z = Z_)))^2)
   } else if (method == "ranger") {
     W <- cbind(Y, Z)
     colnames(W) <- c("Y", 1:d)
-    m <- ranger(data = W, dependent.variable.name = "Y",
-                num.tree = 500, mtry = d)
+    m <- ranger(
+      data = W, dependent.variable.name = "Y",
+      num.tree = 500, mtry = d
+    )
     in_mse <- mean((f(Z[, 1]) - m$predictions)^2)
     W_ <- Z_
     colnames(W_) <- as.character(1:d)
     out_mse <- mean((f(Z_[, 1]) - predict(m, W_)$predictions)^2)
-  } else{
+  } else {
     stop("Method must be either gam or ranger.")
   }
   return(c(in_mse = in_mse, out_mse = out_mse))

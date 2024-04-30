@@ -31,39 +31,38 @@ sim_gam_binary_comparison <- function(n, setting) {
 
   k <- floor((n - 1) / 2 / (d + 1))
 
-  m_formula <- paste0("Y ~ 1+", "s(X, k=k) +",
+  m_formula <- paste0(
+    "Y ~ 1+", "s(X, k=k) +",
     paste0(sapply(1:d, function(x) {
       paste0("s(Z[,", x, "], k=k)")
-    }), collapse = "+"))
+    }), collapse = "+")
+  )
 
   m <- gam(as.formula(m_formula), family = binomial)
   p_gam <- summary(m)$s.table[1, 4]
 
 
-  pcms <- sapply(1:6, function(i) {
+  p_pcms <- sapply(1:6, function(i) {
     pcm_test_binary(
       Y, X, Z, gam_reg_method,
       gam_reg_method_binary
     )
   })
 
-  p_pcm <- 1 - pnorm(pcms[1])
-  p_pcm_avg <- 1 - pnorm(mean(pcms))
-
 
   p_gcm <- gcm_test_binary(Y, X, Z, gam_reg_method, gam_reg_method_binary)
 
 
-  p_wgsc_sep <- wgsc_binary(Y, X, Z, gam_reg_method, gam_reg_method_binary)
-  p_wgsc_seq <- wgsc_binary(Y, X, Z, gam_reg_method, gam_reg_method_binary,
-                             sequential = TRUE)
-  p_wgcm_est <- wGCM_est_binary(Y, X, Z, gam_reg_method,
-    gam_reg_method_binary)
-  p_wgcm_fix <- wGCM_fix(eps, xi, Z, 7) ### same weight.num as wgcm paper sims
+  p_wgsc <- wgsc_binary(Y, X, Z, gam_reg_method, gam_reg_method_binary)
+  p_wgcm_est <- wGCM_est_binary(
+    Y, X, Z, gam_reg_method,
+    gam_reg_method_binary
+  )
+  p_wgcm_fix <- wGCM_fix_binary(Y, X, Z, gam_reg_method, gam_reg_method_binary)
   return(c(
-    p_gam = p_gam, p_pcm = p_pcm, p_pcm_avg = p_pcm_avg, p_gcm = p_gcm,
-    p_wgsc_sep = p_wgsc_sep, p_wgsc_seq = p_wgsc_seq,
-    p_wgcm_est = p_wgcm_est, p_wgcm_fix = p_wgcm_fix
+    p_gam = p_gam, p_pcm1 = p_pcms[1], p_pcm2 = p_pcms[2], p_pcm3 = p_pcms[3],
+    p_pcm4 = p_pcms[4], p_pcm5 = p_pcms[5], p_pcm6 = p_pcms[6], p_gcm = p_gcm,
+    p_wgsc = p_wgsc, p_wgcm_est = p_wgcm_est, p_wgcm_fix = p_wgcm_fix
   ))
 }
 

@@ -4,9 +4,12 @@ suppressPackageStartupMessages({
 })
 
 
-sim_ranger_comparison <- function(n, setting) {
+sim_ranger_comparison <- function(
+    n, setting, pcm_reg_params = list(),
+    gcm_reg_params = list(), wgsc_reg_params = list(),
+    wgcm_est_reg_params = list()) {
   d <- 7
-  f <- function(z) sin(2 * pi * z)
+  f <- function(z) sin(pi * z)
 
   if (setting == 0) {
     Z <- MASS::mvrnorm(n, rep(0, d), diag(1, d))
@@ -35,23 +38,23 @@ sim_ranger_comparison <- function(n, setting) {
     stop("Setting must be either 0, 1, 2 or 3.")
   }
 
-  pcms <- sapply(1:6, function(i) pcm_test(Y, X, Z, ranger_reg_method))
+  p_pcms <- sapply(1:6, function(i) {
+    pcm_test(Y, X, Z, ranger_reg_method, reg_params = pcm_reg_params)
+  })
 
-  p_pcm <- 1 - pnorm(pcms[1])
-  p_pcm_avg <- 1 - pnorm(mean(pcms))
+  p_gcm <- gcm_test(Y, X, Z, ranger_reg_method, reg_params = gcm_reg_params)
 
-
-  p_gcm <- gcm_test(Y, X, Z, ranger_reg_method)
-
-
-  p_wgsc_sep <- wgsc(Y, X, Z, ranger_reg_method)
-  p_wgsc_seq <- wgsc(Y, X, Z, ranger_reg_method, sequential = TRUE)
-  p_wgcm_est <- wGCM_est(Y, X, Z, ranger_reg_method)
-  p_wgcm_fix <- wGCM_fix(eps, xi, Z, 7) ### same weight.num as wgcm paper sim
+  p_wgsc <- wgsc(Y, X, Z, ranger_reg_method, reg_params = wgsc_reg_params)
+  p_wgcm_est <- wGCM_est(Y, X, Z, ranger_reg_method,
+    reg_params = wgcm_est_reg_params
+  )
+  p_wgcm_fix <- wGCM_fix(Y, X, Z, ranger_reg_method,
+    reg_params = gcm_reg_params
+  )
   return(c(
-    p_pcm = p_pcm, p_pcm_avg = p_pcm_avg, p_gcm = p_gcm,
-    p_wgsc_sep = p_wgsc_sep, p_wgsc_seq = p_wgsc_seq,
-    p_wgcm_est = p_wgcm_est, p_wgcm_fix = p_wgcm_fix
+    p_pcm1 = p_pcms[1], p_pcm2 = p_pcms[2], p_pcm3 = p_pcms[3],
+    p_pcm4 = p_pcms[4], p_pcm5 = p_pcms[5], p_pcm6 = p_pcms[6], p_gcm = p_gcm,
+    p_wgsc = p_wgsc, p_wgcm_est = p_wgcm_est, p_wgcm_fix = p_wgcm_fix
   ))
 }
 

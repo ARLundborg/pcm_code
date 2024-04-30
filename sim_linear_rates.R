@@ -19,11 +19,9 @@ sim_linear_rates <- function(n) {
   Y <- X %*% 1:5 / (sqrt(n)) + (my_expit(X[, 1]) + my_expit(Z[, 1])) * rnorm(n)
   Y <- as.numeric(Y)
 
-  T_pcm <- pcm_test(Y, X, Z, lm_reg_method, lm_ghat, ranger_reg_method)
-  p_pcm <- 1 - pnorm(T_pcm)
-  p_wgsc <- wgsc(Y, X, Z, lm_reg_method, sequential = TRUE)
-  p_wgsc_no_x <- wgsc(Y, X, Z, lm_reg_method, sequential = TRUE,
-   no_crossfit = TRUE)
+  p_pcm <- pcm_test(Y, X, Z, lm_reg_method, lm_gtilde, ranger_reg_method)
+  p_wgsc <- wgsc(Y, X, Z, lm_reg_method)
+  p_wgsc_no_x <- wgsc(Y, X, Z, lm_reg_method, no_crossfit = TRUE)
 
   lm_Z <- lm(Y ~ Z)
   lm_XZ <- lm(Y ~ X + Z)
